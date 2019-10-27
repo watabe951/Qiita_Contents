@@ -1,0 +1,20 @@
+class NoisyDataProcesser():
+    def __init__(self, alpha_2, sigma_2, length):
+        self.alpha_2 = alpha_2
+        self.sigma_2 = sigma_2
+        self.length = length
+    def process(self, path):
+        x = []
+        y = []
+
+        x.append(rd.normal(0, np.sqrt(self.alpha_2)))
+        y.append(x[0] + rd.normal(0, np.sqrt(self.sigma_2)))
+        for t in range(self.length):
+            if t > 500:
+                self.sigma_2 = 1.0
+            x.append(x[t] + rd.normal(0, np.sqrt(self.alpha_2)))
+            y.append(x[t+1] + rd.normal(0, np.sqrt(self.sigma_2)))
+        x = np.array(x)
+        y = np.array(y)
+        np.savetxt(path + "noisy_obs.txt", y)
+        np.savetxt(path + "truth_obs.txt", x)
